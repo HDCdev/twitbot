@@ -1,1 +1,1 @@
-worker: python hdcbot.py --daemon --log=INFO
+worker: python twitbot.py --daemon --log=INFO
