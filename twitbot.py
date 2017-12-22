@@ -122,7 +122,7 @@ def get_config(config_file):
         return yaml.load(stream)
 
 
-def get_logger(log_level):
+def set_logger(log_level):
     logger = logging.getLogger('hdcbot')
     level = logging.getLevelName(log_level.upper())
     fmt = logging.Formatter(
@@ -133,7 +133,7 @@ def get_logger(log_level):
     handler.setFormatter(fmt)
     logger.addHandler(handler)
 
-    return logger
+    return None
 
 def tweet_processor(api, status, **kwargs):
     logger = logging.getLogger('hdcbot')
@@ -381,7 +381,7 @@ def followers_processor(api, screen_name=None, max_batch=None):
     return None
 
 
-def get_api(logger):
+def get_api():
     auth = tweepy.OAuthHandler(os.environ['API_KEY'], os.environ['API_SECRET'])
     auth.set_access_token(os.environ['TOKEN'], os.environ['TOKEN_SECRET'])
 
@@ -471,7 +471,8 @@ def main(arguments):
     global params
     params = config_file['params']
 
-    api = get_api(get_logger(log_level))
+    set_logger(log_level)
+    api = get_api()
 
     if screen_name is not None:
         get_user(api, screen_name)
