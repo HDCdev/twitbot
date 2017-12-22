@@ -29,6 +29,8 @@ track:
   - VallecanaSoloHayUna
   - madrid correr
   - madrid strava
+  - strava resumen
+  - strava carrera
 
 follow:
   - screen_name: SSVallecana
