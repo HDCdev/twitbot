@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""hdcbot ...just another tweeter bot.
+"""twitbot ...just another tweeter bot.
 
 Usage:
   twitbot.py [CNF] [options]
