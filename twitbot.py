@@ -182,7 +182,7 @@ def tweet_processor(api, status, **kwargs):
 
     if kwargs['words'] is not None:
         tweet_words = ' '.join(text).split()
-        logger.debug('text: %s,', str(tweet_words))
+        logger.debug('tweet words: %s,', str(tweet_words))
 
         try:
             look = kwargs['words']['look']
