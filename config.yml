@@ -9,7 +9,9 @@ params:
   step_batch: 100
   max_batch: 300
   retweet_tracker: False
-  retweet_follow: True
+  follow_tracker: True
+  retweet_watcher: True
+  follow_watcher: False
 
 words:
   block:
@@ -27,6 +29,11 @@ track:
   - SanSilvestreVallecana
   - san silvestre vallecana
   - VallecanaSoloHayUna
+  - werunmad
+  - SanSilvestreMini
+  - madrid strava
+  - strava resumen
+  - strava carrera
 
 follow:
   - screen_name: SSVallecana

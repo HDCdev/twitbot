@@ -43,12 +43,20 @@ CONFIG = './config.yml'
 
 
 class StreamListener(tweepy.StreamListener):
-    def __init__(self, api, logger, words=None, go_retweet=False):
+    def __init__(self,
+                 api,
+                 logger,
+                 words=None,
+                 go_retweet=False,
+                 go_follow=False):
+
         self.logger = logger
-        self.my_screen_name = api.me().screen_name
+        self.me = api.me()
         self.filter_params = {
+            'me': self.me,
             'words': words,
             'go_retweet': go_retweet,
+            'go_follow': go_follow,
             'is_retweet': False,
         }
         super(StreamListener, self).__init__(api=api)
@@ -64,7 +72,7 @@ class StreamListener(tweepy.StreamListener):
     def on_data(self, raw_data):
         data = json.loads(raw_data)
 
-        if self.my_screen_name == data['user']['screen_name']:
+        if self.me.screen_name == data['user']['screen_name']:
             return True
 
         try:
@@ -142,6 +150,11 @@ def tweet_processor(api, status, **kwargs):
     global likes_counter
     global utc_date
 
+    try:
+        me = kwargs['me']
+    except KeyError:
+        me = api.me()
+
     current_utc_date = datetime.utcnow().strftime('%Y%m%d')
     if current_utc_date != utc_date:
         likes_counter = 0
@@ -204,6 +217,29 @@ def tweet_processor(api, status, **kwargs):
                    for w in block):
                 logger.info('tweet blocked: %d', status.id)
                 return True
+
+    if kwargs['go_follow']:
+        friendship = api.show_friendship(source_id=me.id,
+                                         target_id=status.user.id)[1]
+        if not friendship.following:
+            seconds_to_wait = randint(randint(10, 30), 60 * 3)
+            logger.info(
+                'waiting to follow: %s for %d seconds',
+                status.user.screen_name,
+                seconds_to_wait
+            )
+            time.sleep(seconds_to_wait)
+
+            try:
+                api.create_friendship(status.user.id)
+            except tweepy.TweepError as error:
+                logger.error(
+                    'unable to follow %s: %s', status.user.screen_name, error
+                )
+            else:
+                logger.info('user: %s followed!', status.user.screen_name)
+        else:
+            logger.info('%s already followed', status.user.screen_name)
 
     if retweet_counter < params['max_dairy_retweet'] and (
             kwargs['go_retweet'] or (
@@ -416,7 +452,8 @@ def daemon_thread(api, config_file):
             api,
             logger,
             words=words,
-            go_retweet=params['retweet_tracker']
+            go_retweet=params['retweet_tracker'],
+            go_follow=params['follow_tracker']
         )
     )
 
@@ -425,7 +462,6 @@ def daemon_thread(api, config_file):
     else:
         stream_tracker.filter(track=track, async=True)
 
-
     logger.info('stream_watcher launched')
     stream_watcher = tweepy.Stream(
         auth=api.auth,
@@ -433,7 +469,8 @@ def daemon_thread(api, config_file):
             api,
             logger,
             words=None,
-            go_retweet=params['retweet_follow']
+            go_retweet=params['retweet_watcher'],
+            go_follow=params['follow_watcher']
         )
     )
     stream_watcher.filter(
