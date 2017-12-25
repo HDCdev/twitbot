@@ -218,7 +218,11 @@ def tweet_processor(api, status, **kwargs):
                 logger.info('tweet blocked: %d', status.id)
                 return True
 
-    if kwargs['go_follow']:
+    if (kwargs['go_follow'] and
+            status.user.followers_count > params['min_followers_count'] and
+            (status.user.followers_count + params['add_followers_count'] <
+             status.user.friends_count)):
+
         friendship = api.show_friendship(source_id=me.id,
                                          target_id=status.user.id)[1]
         if not friendship.following:
