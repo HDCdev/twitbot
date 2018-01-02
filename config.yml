@@ -13,6 +13,9 @@ params:
   retweet_watcher: False
   follow_watcher: False
 
+languages:
+  - es
+
 words:
   block:
     - sex
