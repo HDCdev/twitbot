@@ -33,6 +33,7 @@ from docopt import docopt
 from tweepy.models import Status
 from tweepy.utils import import_simplejson
 
+logger = logging.getLogger(__name__)
 json = import_simplejson()
 likes_counter = 0
 retweet_counter = 0
@@ -45,12 +46,10 @@ CONFIG = './config.yml'
 class StreamListener(tweepy.StreamListener):
     def __init__(self,
                  api,
-                 logger,
                  words=None,
                  go_retweet=False,
                  go_follow=False):
 
-        self.logger = logger
         self.me = api.me()
         self.filter_params = {
             'me': self.me,
@@ -84,12 +83,12 @@ class StreamListener(tweepy.StreamListener):
                 data['tweet_text'] = u''
 
         if 'retweeted_status' in data:
-            self.logger.info('retweet detected')
+            logger.info('retweet detected')
             status = Status.parse(self.api, data)
             if self.on_status(status, is_retweet=True) is False:
                 return False
         elif 'in_reply_to_status_id' in data:
-            self.logger.info('in_reply_to_status_id')
+            logger.info('in_reply_to_status_id')
             status = Status.parse(self.api, data)
             if self.on_status(status) is False:
                 return False
@@ -118,7 +117,7 @@ class StreamListener(tweepy.StreamListener):
             if self.on_warning(data['warning']) is False:
                 return False
         else:
-            self.logger.error('Unknown message type: %s', str(raw_data))
+            logger.error('Unknown message type: %s', str(raw_data))
 
     def on_error(self, status_code):
         if status_code == 420:
@@ -131,7 +130,6 @@ def get_config(config_file):
 
 
 def set_logger(log_level):
-    logger = logging.getLogger('hdcbot')
     level = logging.getLevelName(log_level.upper())
     fmt = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -144,8 +142,6 @@ def set_logger(log_level):
     return None
 
 def tweet_processor(api, status, **kwargs):
-    logger = logging.getLogger('hdcbot')
-
     global retweet_counter
     global likes_counter
     global utc_date
@@ -323,8 +319,6 @@ def tweet_processor(api, status, **kwargs):
 
 
 def unfollower(api, config_file):
-    logger = logging.getLogger('hdcbot')
-
     try:
         omit = [f['user_id'] for f in config_file['omit']]
     except:
@@ -352,7 +346,6 @@ def unfollower(api, config_file):
     return None
 
 def followers_processor(api, screen_name=None, max_batch=None):
-    logger = logging.getLogger('hdcbot')
     if max_batch is None:
         max_batch = params['max_batch']
 
@@ -434,8 +427,6 @@ def get_api():
 
 
 def daemon_thread(api, config_file):
-    logger = logging.getLogger('hdcbot')
-
     track = config_file['track']
     words = config_file['words']
     follow = config_file['follow']
@@ -454,7 +445,6 @@ def daemon_thread(api, config_file):
         auth=api.auth,
         listener=StreamListener(
             api,
-            logger,
             words=words,
             go_retweet=params['retweet_tracker'],
             go_follow=params['follow_tracker']
@@ -471,7 +461,6 @@ def daemon_thread(api, config_file):
         auth=api.auth,
         listener=StreamListener(
             api,
-            logger,
             words=None,
             go_retweet=params['retweet_watcher'],
             go_follow=params['follow_watcher']
@@ -483,8 +472,6 @@ def daemon_thread(api, config_file):
     )
 
 def get_user(api, screen_name):
-    logger = logging.getLogger('hdcbot')
-
     try:
         user = api.get_user(screen_name)
     except tweepy.TweepError as error:
