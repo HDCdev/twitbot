@@ -56,7 +56,6 @@ class StreamListener(tweepy.StreamListener):
             'words': words,
             'go_retweet': go_retweet,
             'go_follow': go_follow,
-            'is_retweet': False,
         }
         super(StreamListener, self).__init__(api=api)
 
@@ -83,19 +82,17 @@ class StreamListener(tweepy.StreamListener):
                 data['tweet_text'] = u''
 
         if 'retweeted_status' in data:
-            logger.info('retweet detected')
-            status = Status.parse(self.api, data)
-            if self.on_status(status, is_retweet=True) is False:
-                return False
+            logger.info('retweeted detected')
+            return True
         elif 'in_reply_to_status_id' in data:
-            logger.info('in_reply_to_status_id')
+            if data['in_reply_to_status_id'] is not None:
+                logger.info('reply detected')
+                return True
             status = Status.parse(self.api, data)
             if self.on_status(status) is False:
                 return False
         elif 'delete' in data:
-            delete = data['delete']['status']
-            if self.on_delete(delete['id'], delete['user_id']) is False:
-                return False
+            return True
         elif 'event' in data:
             status = Status.parse(self.api, data)
             if self.on_event(status) is False:
@@ -174,10 +171,6 @@ def tweet_processor(api, status, **kwargs):
         logger.info('sensitive tweet')
         return True
 
-    if status.in_reply_to_screen_name is not None:
-        logger.info('reply tweet')
-        return True
-
     logger.debug(
         'retweeted: %s (%d) favorited: %s (%d)',
         str(status.retweeted),
@@ -243,8 +236,7 @@ def tweet_processor(api, status, **kwargs):
 
     if retweet_counter < params['max_dairy_retweet'] and (
             kwargs['go_retweet'] or (
-                not status.retweeted and
-                not kwargs['is_retweet'] and (
+                not status.retweeted and (
                     status.retweet_count > params['min_retweet_count'] and
                 status.user.followers_count > params['min_followers_count']))):
 
