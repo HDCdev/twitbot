@@ -33,7 +33,7 @@ from docopt import docopt
 from tweepy.models import Status
 from tweepy.utils import import_simplejson
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('twitbot')
 json = import_simplejson()
 likes_counter = 0
 retweet_counter = 0
