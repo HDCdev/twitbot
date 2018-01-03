@@ -67,6 +67,11 @@ class StreamListener(tweepy.StreamListener):
         )
         thread.start()
 
+    def on_limit(self, track):
+        logger.error('limit reached: %s', str(track))
+        time.sleep(60 * params['mins_sleep'])
+        return True
+
     def on_data(self, raw_data):
         data = json.loads(raw_data)
 
