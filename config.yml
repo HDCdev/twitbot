@@ -9,7 +9,7 @@ params:
   step_batch: 100
   max_batch: 300
   retweet_tracker: False
-  follow_tracker: False
+  follow_tracker: True
   retweet_watcher: False
   follow_watcher: False
 
