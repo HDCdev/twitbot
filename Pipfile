@@ -8,8 +8,9 @@ name = "pypi"
 [packages]
 
 tweepy = "*"
-PyYAML = "*"
+pyyaml = "*"
 docopt = "*"
+pylint = "*"
 
 
 [dev-packages]
