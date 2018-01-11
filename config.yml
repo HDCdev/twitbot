@@ -2,7 +2,7 @@ params:
   min_retweet_count: 10
   max_dairy_retweet: 400
   max_dairy_likes: 900
-  min_followers_count: 70
+  min_followers_count: 20
   min_followers_extended: 500
   max_friends_count: 5000
   add_followers_count: 300
@@ -33,6 +33,7 @@ track:
   - EdpRNRMadrid
   - mi carrera en Strava
   - LondonMarathon
+  - ZurichMaratoBCN
 
 follow:
   - screen_name: SSVallecana
