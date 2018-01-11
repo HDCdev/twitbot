@@ -4,6 +4,7 @@ params:
   max_dairy_likes: 900
   min_followers_count: 70
   min_followers_extended: 500
+  max_friends_count: 5000
   add_followers_count: 300
   mins_sleep: 15
   step_batch: 100
