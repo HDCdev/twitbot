@@ -75,7 +75,12 @@ class StreamListener(tweepy.StreamListener):
     def on_data(self, raw_data):
         data = json.loads(raw_data)
 
-        if self.me.screen_name == data['user']['screen_name']:
+        try:
+            screen_name = data['user']['screen_name']
+        except KeyError:
+            screen_name = None
+
+        if self.me.screen_name == screen_name:
             return True
 
         try:
