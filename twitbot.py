@@ -437,7 +437,7 @@ def get_api():
 def daemon_thread(api, config_file):
     track = config_file['track']
     words = config_file['words']
-    follow = config_file['follow']
+    follow = [str(f['user_id']) for f in config_file['follow']]
 
     try:
         languages = config_file['languages']
@@ -474,10 +474,8 @@ def daemon_thread(api, config_file):
             go_follow=params['follow_watcher']
         )
     )
-    stream_watcher.filter(
-        follow=[str(f['user_id']) for f in follow],
-        async=True
-    )
+
+    stream_watcher.filter(follow=follow, async=True)
 
 def get_user(api, screen_name):
     try:
