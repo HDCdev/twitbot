@@ -46,11 +46,13 @@ CONFIG = './config.yml'
 class StreamListener(tweepy.StreamListener):
     def __init__(self,
                  api,
+                 stream_cnf={},
                  words=None,
                  go_retweet=False,
                  go_follow=False):
 
         self.me = api.me()
+        self.stream_cnf = stream_cnf
         self.filter_params = {
             'me': self.me,
             'words': words,
@@ -88,6 +90,19 @@ class StreamListener(tweepy.StreamListener):
                                 for m in data['entities']['user_mentions']]
         except:
             data['mentions'] = []
+
+        if self.stream_cnf is not None:
+            try:
+                stream_key = list(self.stream_cnf.keys())[0]
+                stream_values = list(self.stream_cnf.values())[0]
+            except IndexError:
+                stream_key = 'track'
+                stream_values = []
+
+        if (stream_key == 'follow' and
+                   list(set(data['mentions']).intersection(stream_values))):
+            logger.info('mention to target follow detected')
+            return True
 
         try:
             data['tweet_text'] = data['extended_tweet']['full_text']
@@ -453,6 +468,7 @@ def daemon_thread(api, config_file):
         auth=api.auth,
         listener=StreamListener(
             api,
+            stream_cnf={'track': track},
             words=words,
             go_retweet=params['retweet_tracker'],
             go_follow=params['follow_tracker']
@@ -469,6 +485,7 @@ def daemon_thread(api, config_file):
         auth=api.auth,
         listener=StreamListener(
             api,
+            stream_cnf={'follow': follow},
             words=None,
             go_retweet=params['retweet_watcher'],
             go_follow=params['follow_watcher']
