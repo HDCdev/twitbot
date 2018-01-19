@@ -84,11 +84,10 @@ class StreamListener(tweepy.StreamListener):
             return True
 
         try:
-            mentions = data['entities']['user_mentions']
-        except KeyError:
-            mentions = []
-
-        data['mentions'] = True if mentions else False
+            data['mentions'] = [m['id_str']
+                                for m in data['entities']['user_mentions']]
+        except:
+            data['mentions'] = []
 
         try:
             data['tweet_text'] = data['extended_tweet']['full_text']
@@ -194,7 +193,7 @@ def tweet_processor(api, status, **kwargs):
         status.retweet_count,
         str(status.favorited),
         status.favorite_count,
-        str(status.mentions)
+        'True' if status.mentions else 'False'
     )
 
     text = status.tweet_text.splitlines()
