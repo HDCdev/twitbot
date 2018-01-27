@@ -36,7 +36,7 @@ track:
   - tokyomarathon
   - mmca2018
   - almeria running
-  - ZurichMaratónSevilla17
+  - ZurichMaratónSevilla18
   - YoElegiCorrer
 
 follow:
@@ -98,3 +98,6 @@ follow:
     user_id:     3027133447
   - screen_name: egosportcenter
     user_id:     557797618
+  - screen_name: maratonsevilla
+    user_id:     920779765
+    
