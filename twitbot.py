@@ -12,6 +12,7 @@ Options:
   --daemon                   daemonized execution
   --unfollow                 unfollows non followers
   --followers=<screen_name>  followers proccesor (<me> = my account)
+  --add2db                   use database
   --getid screen_name        id for a given screen name
   --log=<level>              log level [default: DEBUG]
   --version                  show program's version number and exit
@@ -27,6 +28,7 @@ from pprint import pformat
 from random import randint
 from threading import Thread
 
+import pyrebase
 import tweepy
 import yaml
 from docopt import docopt
@@ -39,7 +41,7 @@ likes_counter = 0
 retweet_counter = 0
 utc_date = datetime.utcnow().strftime('%Y%m%d')
 
-VERSION = '0.2'
+VERSION = '0.5'
 CONFIG = './config.yml'
 
 
@@ -262,6 +264,20 @@ def tweet_processor(api, status, **kwargs):
                 )
             else:
                 logger.info('user: %s followed!', status.user.screen_name)
+                if db is not None:
+                    user_data = {
+                        'screen_name': status.user.screen_name,
+                        'id': status.user.id,
+                        'location': status.user.location,
+                        'followers_count': status.user.followers_count,
+                        'friends_count': status.user.friends_count,
+                    }
+
+                    db.child('followed').child(
+                        status.user.screen_name
+                    ).set(user_data, user_db['idToken'])
+
+                logger.info('user stored in firebase')
         else:
             logger.info('%s already followed', status.user.screen_name)
 
@@ -436,6 +452,25 @@ def followers_processor(api, screen_name=None, max_batch=None):
 
     return None
 
+def get_db():
+    config = {
+      'apiKey': os.environ['FIRE_KEY'],
+      'authDomain': '{0:s}.firebaseapp.com'.format(os.environ['FIRE_ID']),
+      'databaseURL': 'https://{0:s}.firebaseio.com'.format(os.environ['FIRE_ID']),
+      'projectId': os.environ['FIRE_ID'],
+      'storageBucket': '{0:s}.appspot.com'.format(os.environ['FIRE_ID']),
+      'messagingSenderId': os.environ['FIRE_SENDER']
+    }
+    firebase = pyrebase.initialize_app(config)
+    auth = firebase.auth()
+
+    user_db = auth.sign_in_with_email_and_password(
+        os.environ['FIRE_MAIL'],
+        os.environ['FIRE_SECRET']
+    )
+
+    return firebase.database(), user_db
+
 
 def get_api():
     auth = tweepy.OAuthHandler(os.environ['API_KEY'], os.environ['API_SECRET'])
@@ -509,6 +544,7 @@ def main(arguments):
     config = arguments['CNF'] if arguments['CNF'] is not None else CONFIG
     daemon = arguments['--daemon']
     unfollow = arguments['--unfollow']
+    add2db = arguments['--add2db']
     followers = arguments['--followers']
     screen_name = arguments['--getid']
     log_level = arguments['--log']
@@ -524,6 +560,12 @@ def main(arguments):
 
     set_logger(log_level)
     api = get_api()
+
+    global db, user_db
+    if add2db:
+        db, user_db = get_db()
+    else:
+        db, user_db = None, None
 
     if screen_name is not None:
         get_user(api, screen_name)
