@@ -1,1 +1,1 @@
-worker: python twitbot.py --daemon
+worker: python twitbot.py --daemon --add2db
