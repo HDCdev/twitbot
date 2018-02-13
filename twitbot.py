@@ -265,6 +265,8 @@ def tweet_processor(api, status, **kwargs):
             else:
                 logger.info('user: %s followed!', status.user.screen_name)
                 if db is not None:
+                    user = auth_db.refresh(user_db['refreshToken'])
+
                     user_data = {
                         'screen_name': status.user.screen_name,
                         'id': status.user.id,
@@ -275,7 +277,7 @@ def tweet_processor(api, status, **kwargs):
 
                     db.child('followed').child(
                         status.user.screen_name
-                    ).set(user_data, user_db['idToken'])
+                    ).set(user_data, user['idToken'])
 
                 logger.info('user stored in firebase')
         else:
@@ -462,14 +464,14 @@ def get_db():
       'messagingSenderId': os.environ['FIRE_SENDER']
     }
     firebase = pyrebase.initialize_app(config)
-    auth = firebase.auth()
+    auth_db = firebase.auth()
 
-    user_db = auth.sign_in_with_email_and_password(
+    user_db = auth_db.sign_in_with_email_and_password(
         os.environ['FIRE_MAIL'],
         os.environ['FIRE_SECRET']
     )
 
-    return firebase.database(), user_db
+    return firebase.database(), auth_db, user_db
 
 
 def get_api():
@@ -561,11 +563,11 @@ def main(arguments):
     set_logger(log_level)
     api = get_api()
 
-    global db, user_db
+    global db, auth_db, user_db
     if add2db:
-        db, user_db = get_db()
+        db, auth_db, user_db = get_db()
     else:
-        db, user_db = None, None
+        db, auth_db, user_db = None, None, None
 
     if screen_name is not None:
         get_user(api, screen_name)
