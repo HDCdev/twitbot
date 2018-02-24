@@ -40,6 +40,8 @@ track:
   - trailrunning
   - runnergirl
   - CorrerMeHaEnseñado
+  - TCSNYCMarathon
+  - MovistarMedioMadrid18
 
 follow:
   - screen_name: SSVallecana
@@ -106,4 +108,6 @@ follow:
     user_id:     897674886
   - screen_name: agimenez1980
     user_id:     145610600
+  - screen_name: bi0manan
+    user_id:     1580734478
     
