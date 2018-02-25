@@ -42,6 +42,7 @@ track:
   - CorrerMeHaEnseñado
   - TCSNYCMarathon
   - MovistarMedioMadrid18
+  - MiVicioEsCorrer
 
 follow:
   - screen_name: SSVallecana
@@ -113,5 +114,11 @@ follow:
   - screen_name: mina77madrid 
     user_id:     1563486546
   - screen_name: quiquerx8
-    user_id:     175131227
+    user_id:     175131227    
+  - screen_name: claveriaricardo
+    user_id:     3074643839
+  - screen_name: psicolaula
+    user_id:     85674043
+  - screen_name: trisportrevista
+    user_id:     847393353561808897
     
