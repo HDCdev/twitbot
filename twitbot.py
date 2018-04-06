@@ -289,7 +289,7 @@ def tweet_processor(api, status, **kwargs):
                     status.retweet_count > params['min_retweet_count'] and
                 status.user.followers_count > params['min_followers_count']))):
 
-        seconds_to_wait = randint(randint(10, 30), 60 * 3)
+        seconds_to_wait = randint(randint(10, 30), 600 * 3)
         logger.info(
             'waiting to retweet id: %d for %d seconds',
             status.id,
@@ -323,7 +323,7 @@ def tweet_processor(api, status, **kwargs):
             retweet_counter += 1
 
     if likes_counter < params['max_dairy_likes'] and not status.favorited:
-        seconds_to_wait = randint(randint(10, 30), 60 * 2)
+        seconds_to_wait = randint(randint(10, 30), 600 * 2)
         logger.info(
             'waiting to favor id: %d for %d seconds',
             status.id,
