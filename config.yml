@@ -33,10 +33,20 @@ track:
 
   - EdpRNRMadrid
   - LondonMarathon
-  - Maraton Madrid
-  - maraton Madrid
-  - maratón Madrid
-  - Maratón Madrid
+  - EdpRNRMadrid
+  - LondonMarathon
+  - ZurichMaratoBCN
+  - almeria running
+  - ZurichMaratónSevilla18
+  - gobik
+  - entrenamiento maraton
+  - trailrunning
+  - runnergirl
+  - CorrerMeHaEnseñado
+  - TCSNYCMarathon
+  - MovistarMedioMadrid18
+  - MiVicioEsCorrer
+  - MaratonSevilla
   - ExpoDepor
   - MaratónPopulardeMadrid
   - 42km
@@ -44,5 +54,84 @@ track:
 follow:
   - screen_name: SSVallecana
     user_id:     734711875938684929
+  - screen_name: labicicletanet
+    user_id:     437843937
+  - screen_name: senderosalmeria
+    user_id:     3872226215
+  - screen_name: oscarregofpt
+    user_id:     2902525197
+  - screen_name: NandoPR70
+    user_id:     841559698226712576
+  - screen_name: JaviHds42k
+    user_id:     378214401
+  - screen_name: yolandahds
+    user_id:     779882167
+  - screen_name: jabatosrc
+    user_id:     1969184156
+  - screen_name: jjalesina
+    user_id:     2911273129
+  - screen_name: ConsuCM
+    user_id:     418619624
+  - screen_name: JuanFraHernande
+    user_id:     426115682
+  - screen_name: saezf_antonia
+    user_id:     613522973
+  - screen_name: alaureada
+    user_id:    728215788734320640
+  - screen_name: correrporburgos
+    user_id:     3207431303
+  - screen_name: juan_chopera
+    user_id:     273021865
+  - screen_name: osakita
+    user_id:     950430762
+  - screen_name: albertoestrel15
+    user_id:     2273942305
+  - screen_name: misscitronela
+    user_id:     1100024041
+  - screen_name: lokoxvivir365
+    user_id:     2953519761
+  - screen_name: otrolocokcorre
+    user_id:     2666965542
+  - screen_name: inmadipi
+    user_id:     721273439051517952
+  - screen_name: palazzilin
+    user_id:     2955710619
+  - screen_name: momaca124
+    user_id:     2922877947
+  - screen_name: manolo_izan
+    user_id:     133821460
+  - screen_name: only_jessi
+    user_id:     2494128492
+  - screen_name: salome22
+    user_id:     17978250
+  - screen_name: quiquerx8 
+    user_id:     175131227
+  - screen_name: fotomontajista
+    user_id:     3027133447
+  - screen_name: egosportcenter
+    user_id:     557797618
+  - screen_name: maratonsevilla
+    user_id:     920779765
+  - screen_name: bikefriendly_es
+    user_id:     897674886
+  - screen_name: agimenez1980
+    user_id:     145610600
+  - screen_name: bi0manan
+    user_id:     1580734478
+  - screen_name: mina77madrid 
+    user_id:     1563486546
+  - screen_name: quiquerx8
+    user_id:     175131227    
+  - screen_name: claveriaricardo
+    user_id:     3074643839
+  - screen_name: psicolaula
+    user_id:     85674043
+  - screen_name: trisportrevista
+    user_id:     847393353561808897
+  - screen_name: isabelisamoren
+    user_id:     3398517485
+  - screen_name: irenina14
+    user_id:     2973488993
+  - screen_name: thaica_
+    user_id:     3017652645
 
-   
