@@ -16,6 +16,7 @@ params:
 
 languages:
   - es
+  - en
 
 words:
   block:
@@ -33,6 +34,7 @@ track:
 
   - xxVueltaRTVE
   - xxlavuelta18
+  - TCSNYCMarathon
 
 follow:
   - screen_name: SSVallecana
